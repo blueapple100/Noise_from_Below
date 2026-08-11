@@ -7,12 +7,10 @@
         body { margin: 0; padding: 0; font-family: sans-serif; background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%); min-height: 100vh; }
         header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
         
-        /* 로고 크기 조절 (height 값을 변경하세요) */
         #logo { height: 80px; margin-right: 20px; }
         
         .menu-text { color: white; font-size: 24px; font-weight: bold; }
-        
-        /* 버튼을 2줄로 배열 (5개씩) */
+
         .container { 
             display: grid; 
             grid-template-columns: repeat(5, 1fr); 
@@ -22,7 +20,6 @@
             margin: 0 auto;
         }
         
-        /* 이미지 버튼 스타일 + 그림자 추가 */
         .member-btn { 
             border: 4px solid white; 
             padding: 0; 
@@ -31,11 +28,11 @@
             overflow: hidden; 
             transition: transform 0.2s, box-shadow 0.2s;
             display: flex; flex-direction: column; align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 버튼 아래 그림자 */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .member-btn:hover { 
             transform: scale(1.05); 
-            box-shadow: 0 8px 12px rgba(0,0,0,0.2); /* 마우스 올렸을 때 그림자 */
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2); 
         }
         .member-btn img { width: 100%; height: 180px; object-fit: cover; }
         .member-btn span { padding: 10px; font-weight: bold; color: #333; }
@@ -48,7 +45,7 @@
 <body>
 <header>
     <img src="로고.png" id="logo" alt="Logo">
-    <div class="menu-text">팀 아랫집</div>
+    <div class="menu-text">민원이 안끊기는 불륨 MAX 아랫집</div>
 </header>
 <div class="container" id="member-container"></div>
 
@@ -65,16 +62,16 @@
 
 <script>
     const members = [
-        { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88" },
-        { name: "문장준", color: "#FF0000", img: "문장준.png", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09" },
-        { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE" },
-        { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0" },
-        { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0" },
-        { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4" },
-        { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110" },
-        { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017" },
-        { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od" },
-        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA" }
+        { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "아빠 / 독새의 고전적인 특징은 온갖 괴성이 난무하는 고텐션 방송이며, 영상마다 비명을 지르거나 이상한 소리를 내는 부분을 심심찮게 찾아볼 수 있다. 심지어 독새 본인도 웃겼는지, 괴성이 나올 때마다 골든 프레디 점프스케어를 화면에 띄운다." },
+        { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "장남 / 빨간 체크무늬 옷과 검정색 바지와 M이 쓰여진 모자를 쓰고 있다. 특이하게도 아랫집 멤버 중 혼자만 얼굴을 공개했다. 팀 아랫집 멤버 중 혼자만 이름이 본명이다." },
+        { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "차남 / 분홍색 머리에 하얀 후드티, 청바지, 분홍색 가방과 돼지 모자를 쓰고 있다." },
+        { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "4-1남 / 남색에 가까운 청발에 선글라스, 보라색 조끼 안에 하얀 후드티를 입고 검은 바지를 입고 있다.. 아랫집 멤버들 중 유일하게 1만명 이상의 구독자를 보유하고 있으며, 포세이큰 리뷰 영상을 주로 업로드한다. 여담으로 Friday Night Funkin' 여러 모드 제작을 디렉팅하기도 한다!" },
+        { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0", desc: "4-2남 / 하늘색 곰 귀가 있는 머리와 후드티를 입고 있다. 파곰뱃살통통이라는 밈이 있다. 줄여서 파뱃통 심지어 이 밈으로 자기 자신을 까기도 한다! [60] 원래는 주로 Piggy에 대한 영상을 업로드하였는데, 최근 들어 영상이 잘 업로드되지 않는걸로 보아 유튜브 활동에 대한 템포를 잠시 낮춘 것으로 보인다." },
+        { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4", desc: "4-3남 /  초록색 공룡 탈을 쓰고 있다. 과거에는 Piggy 관련 영상들을 업로드 하였지만, 어째서인지 과거 영상들이 전부 내려가고 소수의 정체를 알 수 없는 의문의 슈팅게임 쇼츠만 남았다." },
+        { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "4-4남 / 주황색 머리카락에 주황붉은 눈동자, 핑크색 헤드셋을 쓰고 있다. 박사같은 작은 안경 또한 착용하고 있다. 아랫집 크루에 가장 마지막으로 합류한 멤버이다. 본인 피셜 블애와 만난지 어언 6년이 되었다고 한다. 주로 게임 관련 사운드트랙을 제작해서 올린다! " },
+        { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 연보라색 헤어와 토끼 모자, 상의를 착용하고 있다. 아랫집의 유일한 여성 멤버이며, 빠른 년생이라고 한다..? [68] 리듬게임을 매우 잘하며, 채널에 업로드 된 영상들이 대부분 리듬게임 플레이 영상들이다. 설탕이라는 애완견을 키우고 있다! 구독자 1천명 기념으로 Q&A 영상을 업로드 하였는데, 독새를 오빠라고 칭하면 서로 극혐한다고 한다." },
+        { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "막내 / 주로 아랫집 멤버들의 샌드백 역할을 한다. 가장 큰 특징은 귀엽다는 것이다. 그냥 귀엽다. 원래는 조용한 성격으로 보이지만, 한 번 말을 하기 시작하면 사운드의 대부분을 채운다. -- 녹화 중에 뜬금없이 하품을 하기도..." },
+        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "집나간 새끼 / 노란색 목도리에 초롱초롱한 눈이 포인트, 양은냄비를 거꾸로 뒤집어 쓰고 있다. 아랫집 멤버들 중 가장 근황이 적으며, 현생에 집중하고 있는 것으로 추정된다. 그러나 독새의 영상에는 종종 출연하기에 얼굴은 비춰주지 않는 것은 아니다!" }
     ];
 
     const container = document.getElementById('member-container');
@@ -88,10 +85,10 @@
         container.appendChild(btn);
     });
 
-    function openModal(m) {
+function openModal(m) {
         document.getElementById('modal-img').src = m.img;
         document.getElementById('modal-name').innerText = m.name;
-        document.getElementById('modal-desc').innerText = m.name + '님에 대한 소개입니다.';
+        document.getElementById('modal-desc').innerText = m.desc; 
         document.getElementById('modal-youtube').href = m.yt;
         document.getElementById('modal').style.display = 'flex';
     }
