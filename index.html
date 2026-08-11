@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>팀 아랫집 멤버 소개</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%); min-height: 100vh; }
+        header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
+        #logo { height: 50px; margin-right: 20px; }
+        .menu-text { color: white; font-size: 24px; font-weight: bold; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 40px; }
+        .member-btn { border: none; padding: 20px; border-radius: 15px; cursor: pointer; font-size: 18px; font-weight: bold; color: #333; transition: transform 0.2s; }
+        .member-btn:hover { transform: scale(1.05); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; display: flex; gap: 20px; width: 80%; max-width: 600px; }
+        .modal-img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; }
+    </style>
+</head>
+<body>
+<header>
+    <img src="로고.png" id="logo" alt="Logo">
+    <div class="menu-text">팀 아랫집 멤버들</div>
+</header>
+<div class="container" id="member-container"></div>
+
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <img id="modal-img" class="modal-img" src="" alt="Member">
+        <div>
+            <h2 id="modal-name"></h2>
+            <p id="modal-desc"></p>
+            <a id="modal-youtube" href="#" target="_blank">유튜브 채널 바로가기</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 멤버별 정보를 여기에 입력하세요
+    const members = [
+        { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88" },
+        { name: "문장준", color: "#FF0000", img: "문장준.png", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09" },
+        { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE" },
+        { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0" },
+        { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0" },
+        { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4" },
+        { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110" },
+        { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017" },
+        { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od" },
+        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA" }
+    ];
+
+    const container = document.getElementById('member-container');
+    
+    members.forEach(m => {
+        const btn = document.createElement('button');
+        btn.className = 'member-btn';
+        btn.style.background = `linear-gradient(to bottom right, ${m.color}, #ffffff)`;
+        btn.innerText = m.name;
+        btn.onclick = () => openModal(m);
+        container.appendChild(btn);
+    });
+
+    function openModal(m) {
+        document.getElementById('modal-img').src = m.img;
+        document.getElementById('modal-name').innerText = m.name;
+        document.getElementById('modal-desc').innerText = m.name + '님에 대한 소개입니다.';
+        document.getElementById('modal-youtube').href = m.yt; // 각 멤버의 유튜브 링크
+        document.getElementById('modal').style.display = 'flex';
+    }
+    
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+</script>
+</body>
+</html>
