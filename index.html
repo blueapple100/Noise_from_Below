@@ -2,29 +2,45 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>아랫집에서 올라왔어요!!!!!!!!!!!!!!!!!!!!!!!!</title>
+    <title>팀 아랫집에서 올라왔어요!!!!!!</title>
     <style>
         body { margin: 0; padding: 0; font-family: sans-serif; background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%); min-height: 100vh; }
         header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
-        #logo { height: 60px; margin-right: 20px; }
-        .menu-text { color: white; font-size: 24px; font-weight: bold; }
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 40px; }
         
-        /* 이미지 버튼 스타일 */
+        /* 로고 크기 조절 (height 값을 변경하세요) */
+        #logo { height: 80px; margin-right: 20px; }
+        
+        .menu-text { color: white; font-size: 24px; font-weight: bold; }
+        
+        /* 버튼을 2줄로 배열 (5개씩) */
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 20px; 
+            padding: 40px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 이미지 버튼 스타일 + 그림자 추가 */
         .member-btn { 
             border: 4px solid white; 
             padding: 0; 
             border-radius: 15px; 
             cursor: pointer; 
             overflow: hidden; 
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 버튼 아래 그림자 */
         }
-        .member-btn:hover { transform: scale(1.05); }
-        .member-btn img { width: 100%; height: 150px; object-fit: cover; }
+        .member-btn:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2); /* 마우스 올렸을 때 그림자 */
+        }
+        .member-btn img { width: 100%; height: 180px; object-fit: cover; }
         .member-btn span { padding: 10px; font-weight: bold; color: #333; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 20px; display: flex; gap: 20px; width: 80%; max-width: 600px; }
         .modal-img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; }
     </style>
@@ -42,7 +58,7 @@
         <div>
             <h2 id="modal-name"></h2>
             <p id="modal-desc"></p>
-            <a id="modal-youtube" href="#" target="_blank">유튜브 채널 바로가기</a>
+            <a id="modal-youtube" href="#" target="_blank" style="font-weight:bold; color:#ff0000;">유튜브 채널 바로가기</a>
         </div>
     </div>
 </div>
@@ -66,7 +82,6 @@
     members.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'member-btn';
-        // 버튼 배경을 요청하신 그라데이션으로 설정
         btn.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
         btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
         btn.onclick = () => openModal(m);
