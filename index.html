@@ -8,18 +8,43 @@
         header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
         #logo { height: 80px; margin-right: 20px; }
         .menu-text { color: white; font-size: 24px; font-weight: bold; }
-        
-        .container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .member-btn { border: 4px solid white; padding: 0; border-radius: 15px; cursor: pointer; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .member-btn:hover { transform: scale(1.05); box-shadow: 0 8px 12px rgba(0,0,0,0.2); }
-        .member-btn img { width: 100%; height: 180px; object-fit: cover; }
-        .member-btn span { padding: 10px; font-weight: bold; color: #333; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 20px; display: flex; gap: 20px; width: 80%; max-width: 600px; }
         .modal-img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
         .modal-text-area { max-height: 250px; overflow-y: auto; padding-right: 10px; }
         .read-more-btn { display: inline-block; margin-top: 5px; color: blue; cursor: pointer; font-size: 14px; text-decoration: underline; }
+
+        .tree-section { max-width: 1300px; margin: 60px auto; padding: 0 30px; }
+
+        .tree-card { display: flex; flex-direction: column; align-items: center; padding: 8px 8px 10px; border-radius: 14px; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .tree-card:hover { transform: scale(1.06); box-shadow: 0 8px 14px rgba(0,0,0,0.22); }
+        .tree-card img { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; display: block; }
+        .tree-card span { margin-top: 6px; font-weight: bold; color: #222; }
+        .tree-card.sm img { width: 78px; height: 78px; }
+        .tree-card.sm span { font-size: 13px; margin-top: 4px; }
+        .tree-card.parent img { width: 130px; height: 130px; }
+
+        .tree-parents { display: flex; align-items: center; justify-content: center; gap: 0; }
+        .tree-hline { width: 60px; height: 5px; background: #111; }
+
+        .tree-vline-drop { width: 5px; height: 40px; background: #111; margin: 0 auto; }
+
+        .tree-children-wrap { position: relative; padding-top: 40px; }
+        .tree-children-hline { position: absolute; top: 40px; left: 4%; right: 4%; height: 5px; background: #111; }
+        .tree-children { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 40px; }
+
+        .tree-slot { position: relative; display: flex; justify-content: center; flex: 1; }
+        .tree-slot::before { content: ''; position: absolute; top: -40px; left: 50%; width: 5px; height: 40px; background: #111; transform: translateX(-50%); }
+
+        .tree-hub-slot { flex: 2.6; }
+        .tree-hub { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .hub-drop { width: 5px; height: 30px; background: #111; }
+        .hub-wrap { position: relative; padding-top: 30px; width: 100%; }
+        .hub-hline { position: absolute; top: 30px; left: 12%; right: 12%; height: 5px; background: #111; }
+        .hub-row { display: flex; justify-content: space-between; padding-top: 30px; }
+        .hub-item { position: relative; display: flex; justify-content: center; flex: 1; }
+        .hub-item::before { content: ''; position: absolute; top: -30px; left: 50%; width: 5px; height: 30px; background: #111; transform: translateX(-50%); }
     </style>
 </head>
 <body>
@@ -28,7 +53,7 @@
     <div class="menu-text">민원이 안끊기는 볼륨 MAX 아랫집</div>
 </header>
 
-<div class="container" id="member-container"></div>
+<div class="tree-section" id="tree-section"></div>
 
 <div id="modal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
@@ -44,6 +69,7 @@
 <script>
     const members = [
         { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다" },
+        { name: "이배일", color: "#FFFFFF", img: "이배일.png", yt: "https://www.youtube.com/@%EC%9D%B4%EB%B0%B0%EC%9D%BC", desc: "[ 엄마 ]<br>독새 ㅎㅇ" },
         { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다" },
         { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티를 입고 있다." },
         { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] 블애입니다.!" },
@@ -57,16 +83,86 @@
         { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 집나간 새끼 ] 현생에 집중 중." }
     ];
 
+    const byName = (n) => members.find(m => m.name === n);
+    const dad = byName("독새");
+    const mom = byName("이배일");
+)
+    function makeCard(m, extraClass) {
+        const el = document.createElement('div');
+        el.className = 'tree-card' + (extraClass ? ' ' + extraClass : '');
+        el.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
+        el.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
+        el.onclick = () => openModal(m);
+        return el;
+    }
 
-    const container = document.getElementById('member-container');
-    members.forEach(m => {
-        const btn = document.createElement('button');
-        btn.className = 'member-btn';
-        btn.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
-        btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
-        btn.onclick = () => openModal(m);
-        container.appendChild(btn);
-    });
+    function renderTree() {
+        const section = document.getElementById('tree-section');
+        section.innerHTML = '';
+
+        const parentsRow = document.createElement('div');
+        parentsRow.className = 'tree-parents';
+        parentsRow.appendChild(makeCard(dad, 'parent'));
+        const hline = document.createElement('div');
+        hline.className = 'tree-hline';
+        parentsRow.appendChild(hline);
+        parentsRow.appendChild(makeCard(mom, 'parent'));
+        section.appendChild(parentsRow);
+
+
+        const drop = document.createElement('div');
+        drop.className = 'tree-vline-drop';
+        section.appendChild(drop);
+        
+        const wrap = document.createElement('div');
+        wrap.className = 'tree-children-wrap';
+        wrap.innerHTML = '<div class="tree-children-hline"></div>';
+        const row = document.createElement('div');
+        row.className = 'tree-children';
+
+        const singleNames1 = ["문장준", "윈티"];
+        const hubNames = ["블애", "파곰", "재켄", "오드"];
+        const singleNames2 = ["김설띠", "고스", "탈두"];
+
+        singleNames1.forEach(n => {
+            const slot = document.createElement('div');
+            slot.className = 'tree-slot';
+            slot.appendChild(makeCard(byName(n)));
+            row.appendChild(slot);
+        });
+
+        const hubSlot = document.createElement('div');
+        hubSlot.className = 'tree-slot tree-hub-slot';
+        const hub = document.createElement('div');
+        hub.className = 'tree-hub';
+        hub.innerHTML = '<div class="hub-drop"></div>';
+        const hubWrap = document.createElement('div');
+        hubWrap.className = 'hub-wrap';
+        hubWrap.innerHTML = '<div class="hub-hline"></div>';
+        const hubRow = document.createElement('div');
+        hubRow.className = 'hub-row';
+        hubNames.forEach(n => {
+            const item = document.createElement('div');
+            item.className = 'hub-item';
+            item.appendChild(makeCard(byName(n), 'sm'));
+            hubRow.appendChild(item);
+        });
+        hubWrap.appendChild(hubRow);
+        hub.appendChild(hubWrap);
+        hubSlot.appendChild(hub);
+        row.appendChild(hubSlot);
+
+        singleNames2.forEach(n => {
+            const slot = document.createElement('div');
+            slot.className = 'tree-slot';
+            slot.appendChild(makeCard(byName(n)));
+            row.appendChild(slot);
+        });
+
+        wrap.appendChild(row);
+        section.appendChild(wrap);
+    }
+    renderTree();
 
     function openModal(m) {
         document.getElementById('modal-img').src = m.img;
@@ -74,8 +170,18 @@
         const descElem = document.getElementById('modal-desc');
         if (m.name === "재켄") {
             descElem.innerHTML = m.shortDesc + '<span id="more-text" style="display:none;">' + m.longDesc + '</span><br><span class="read-more-btn" onclick="showFull()">...더보기</span>';
-        } else { descElem.innerHTML = m.desc; }
-        document.getElementById('modal-youtube').href = m.yt;
+        } else if (m.desc) {
+            descElem.innerHTML = m.desc;
+        } else {
+            descElem.innerHTML = '';
+        }
+        const ytLink = document.getElementById('modal-youtube');
+        if (m.yt) {
+            ytLink.href = m.yt;
+            ytLink.style.display = 'inline-block';
+        } else {
+            ytLink.style.display = 'none';
+        }
         document.getElementById('modal').style.display = 'flex';
     }
     function showFull() { document.getElementById('more-text').style.display = 'inline'; document.querySelector('.read-more-btn').style.display = 'none'; }
