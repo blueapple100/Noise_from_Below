@@ -2,88 +2,268 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>팀 아랫집에서 올라왔어요!!!!!!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팀 아랫집 가계도</title>
     <style>
-        body { margin: 0; padding: 0; font-family: sans-serif; background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%); min-height: 100vh; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-        header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
-        #logo { height: 80px; margin-right: 20px; }
-        .menu-text { color: white; font-size: 24px; font-weight: bold; }
-        
-        .container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .member-btn { border: 4px solid white; padding: 0; border-radius: 15px; cursor: pointer; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .member-btn:hover { transform: scale(1.05); box-shadow: 0 8px 12px rgba(0,0,0,0.2); }
-        .member-btn img { width: 100%; height: 180px; object-fit: cover; }
-        .member-btn span { padding: 10px; font-weight: bold; color: #333; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+        header {
+            padding: 20px;
+            background-color: #212121;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            position: relative;
+            z-index: 100;
+        }
+        #logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        #tree-main {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            gap: 50px;
+            padding: 50px;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .member-box {
+            border: 4px solid white;
+            border-radius: 15px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: white;
+            width: 120px; 
+            height: 160px;
+        }
+        .member-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .member-box img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        .member-box span {
+            padding: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
+
+        #parents-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 150px;
+            position: relative;
+            padding-top: 20px;
+        }
+        #mom-box {
+            border: 4px solid white;
+            background: white;
+            width: 120px;
+            height: 160px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #children-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px; 
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        #tree-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 200; }
         .modal-content { background: white; padding: 30px; border-radius: 20px; display: flex; gap: 20px; width: 80%; max-width: 600px; }
         .modal-img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
         .modal-text-area { max-height: 250px; overflow-y: auto; padding-right: 10px; }
         .read-more-btn { display: inline-block; margin-top: 5px; color: blue; cursor: pointer; font-size: 14px; text-decoration: underline; }
+
     </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <img src="로고.png" id="logo" alt="Logo">
-    <div class="menu-text">민원이 안끊기는 볼륨 MAX 아랫집</div>
-</header>
+    <header>
+        <img src="로고.png" id="logo" alt="Logo">
+        <div class="menu-text">팀 아랫집에서 올라왔어요!!!!!!</div>
+    </header>
 
-<div class="container" id="member-container"></div>
+    <div id="tree-main">
+        <section id="parents-row">
+            <div class="member-box" id="doksai-box" onclick="openModal(members[0])" style="background: linear-gradient(to bottom, #808080, #ffffff);">
+                <img src="독새.png" alt="독새">
+                <span>독새</span>
+            </div>
+            <div id="parents-center-point" style="width: 0; height: 0; position: absolute;"></div>
+            <div id="mom-box">엄마</div>
+        </section>
 
-<div id="modal" class="modal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <img id="modal-img" class="modal-img" src="" alt="Member">
-        <div class="modal-text-area">
-            <h2 id="modal-name" style="margin-top:0;"></h2>
-            <p id="modal-desc"></p>
-            <a id="modal-youtube" href="#" target="_blank" style="font-weight:bold; color:#ff0000; display:inline-block; margin-top:10px;">유튜브 채널 바로가기</a>
+        <section id="children-row">
+        </section>
+
+        <svg id="tree-lines"></svg>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img id="modal-img" class="modal-img" src="" alt="Member">
+            <div class="modal-text-area">
+                <h2 id="modal-name" style="margin-top:0;"></h2>
+                <p id="modal-desc"></p>
+                <a id="modal-youtube" href="#" target="_blank" style="font-weight:bold; color:#ff0000; display:inline-block; margin-top:10px;">유튜브 채널 바로가기</a>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const members = [
-        { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다" },
-        { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다" },
-        { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티를 입고 있다." },
-        { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] 블애입니다.!" },
-        { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0", desc: "[ 사남 ] 파곰뱃살통통 밈이 유명함." },
-        { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4", shortDesc: "[ 오남 ]<br>L: 아랫집, 그림 그리기랑 그림 구경하기, 게임, 게임 개발, 운동, 🤓",
-          longDesc: ", 샌즈, 파피루스, 언더펠 샌즈, 언더스왑 샌즈, 스왑펠 샌즈, 펠스왑 샌즈, 아우터테일 샌즈, 아우터펠 샌즈, 아우터스왑 샌즈, 스토리시프트 샌즈, 스토리스핀 샌즈, 더스트 샌즈, 호러 샌즈, 킬러 샌즈, 잉크 샌즈, 에러 샌즈, 페이탈 에러 샌즈, 제노 샌즈, 프레쉬 샌즈, 드림 샌즈, 나이트메어 샌즈, 크로스 샌즈, 에픽 샌즈, 리퍼 샌즈, 하드테일 샌즈, 라스트 브레스 샌즈, 서든 체인지 샌즈, 인세니티 샌즈, 네거테일 샌즈, 네거티브테일 샌즈, 언더월드 샌즈, 호러스왑 샌즈, 호러펠 샌즈, 더스트펠 샌즈, 더스트스왑 샌즈, 더스트더스트 샌즈, 스왑스왑 샌즈, 리버트스왑 샌즈, 펠펠 샌즈, 리버트펠 샌즈, 드림스왑 샌즈, 블루베리 샌즈, 블루베러 샌즈, 에러 404 샌즈, 프레쉬 잉크 샌즈, 델타 샌즈, 퀀텀테일 샌즈, 트레이너테일 샌즈, 디스트러스트 샌즈, 더스트트러스트 샌즈, 티라노사우루스, 트리케라톱스, 벨로키랍토르, 스피노사우루스, 스테고사우루스, 브라키오사우루스, 아파토사우루스, 디플로도쿠스, 알로사우루스, 카르노타우루스, 기가노토사우루스, 안킬로사우루스, 파라사우롤로푸스, 이구아노돈, 파키케팔로사우루스, 갈리미무스, 데이노니쿠스, 유타랍토르, 알베르토사우루스, 타르보사우루스, 케라토사우루스, 딜로포사우루스, 바리오닉스, 수코미무스, 아크로칸토사우루스, 카르카로돈토사우루스, 마푸사우루스, 메갈로사우루스, 코엘로피시스, 콤프소그나투스, 오비랍토르, 테리지노사우루스, 데이노케이루스, 오르니토미무스, 에드몬토사우루스, 코리토사우루스, 람베오사우루스, 마이아사우라, 카스모사우루스, 스티라코사우루스, 프로토케라톱스, 프시타코사우루스, 켄트로사우루스, 아마르가사우루스, 아르헨티노사우루스, 파타고티탄, 살타사우루스, 마멘키사우루스, 카마라사우루스, 노도사우루스, 하츄핑, 바로핑, 아자핑, 차차핑, 라라핑, 해핑, 키키핑, 아잉핑, 부끄핑, 깜빡핑, 띠용핑, 주르핑, 차나핑, 따라핑, 나르핑, 무셔핑, 투투핑, 떠벌핑, 다조핑, 화나핑, 시러핑, 바네핑, 덜덜핑, 그림핑, 무거핑, 꺼꿀핑, 씽씽핑, 베베핑, 코자핑, 딱풀핑, 모야핑, 토이핑, 또까핑, 플라핑, 노라핑, 노리핑, 아휴핑, 똑똑핑, 꽁꽁핑, 찌릿핑, 홀로핑, 악동핑, 믿어핑, 방글핑, 조아핑, 토닥핑, 까르핑, 아야핑, 소원핑, 쪼꼼핑, 싹싹핑, 맛나핑, 포근핑, 메모핑, 공쥬핑, 짝짝핑, 주네핑, 뚝딱핑, 발레핑, 원더핑, 보석핑, 솔찌핑, 나나핑, 꾸래핑, 행운핑, 빨리핑, 얌얌핑, 뜨거핑, 삐뽀핑, 힘내핑, 고쳐핑, 아라핑, 패션핑, 꼼딱핑, 퐁당핑, 파티핑, 꾸며핑, 삐짐핑, 아아핑, 빙글핑, 하늘핑, 고고핑, 아롱핑, 다롱핑, 샤샤핑, 말랑핑, 포실핑, 새콤핑, 달콤핑, 캔디핑, 머랭핑, 샌드핑, 또너핑, 와플핑, 마카핑, 핫케핑, 머핑, 커핑, 요거핑, 눈꽃핑, 푸딩핑, 멜로핑, 쪼꼬핑, 뿌뿌핑, 빤짝핑, 초롱핑, 빛나핑, 오로라핑, 왕자핑, 뽀뽀핑, 유리핑, 딩동핑, 나그네핑, 댄스핑, 고마핑, 함께핑, 깡총핑, 훌라핑, 나눔핑, 루루핑, 몰래핑, 뿌쵸핑, 여우핑, 뽀송핑, 통통핑,<br>H: 탈두의 12번째 척추뼈."
-        },
-        { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "[ 육남 ] 아랫집에 마지막 합류, 사운드트랙 제작." },
-        { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 유일한 여성 멤버, 리듬게임 고수." },
-        { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "[ 막내 ] 스키비디 토일렛과 SCP를 좋아함." },
-        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 집나간 새끼 ] 현생에 집중 중." }
-    ];
+    <script>
+        const members = [
+            { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다" },
+            { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다" },
+            { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티를 입고 있다." },
+            { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] 블애입니다.!" },
+            { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0", desc: "[ 사남 ] 파곰뱃살통통 밈이 유명함." },
+            { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4", shortDesc: "[ 오남 ] 그림과 게임을 좋아함.", longDesc: ", 샌즈 캐릭터 등 다양한 그림을 그림." },
+            { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "[ 육남 ] 아랫집에 마지막 합류, 사운드트랙 제작." },
+            { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 유일한 여성 멤버, 리듬게임 고수." },
+            { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "[ 막내 ] 스키비디 토일렛과 SCP를 좋아함." },
+            { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 집나간 새끼 ] 현생에 집중 중." }
+        ];
 
+        const children = members.slice(1);
 
-    const container = document.getElementById('member-container');
-    members.forEach(m => {
-        const btn = document.createElement('button');
-        btn.className = 'member-btn';
-        btn.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
-        btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
-        btn.onclick = () => openModal(m);
-        container.appendChild(btn);
-    });
+        const childrenRow = document.getElementById('children-row');
+        children.forEach(m => {
+            const btn = document.createElement('div');
+            btn.className = 'member-box';
+            btn.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
+            btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
+            btn.onclick = () => openModal(m);
+            childrenRow.appendChild(btn);
+        });
 
-    function openModal(m) {
-        document.getElementById('modal-img').src = m.img;
-        document.getElementById('modal-name').innerText = m.name;
-        const descElem = document.getElementById('modal-desc');
-        if (m.name === "재켄") {
-            descElem.innerHTML = m.shortDesc + '<span id="more-text" style="display:none;">' + m.longDesc + '</span><br><span class="read-more-btn" onclick="showFull()">...더보기</span>';
-        } else { descElem.innerHTML = m.desc; }
-        document.getElementById('modal-youtube').href = m.yt;
-        document.getElementById('modal').style.display = 'flex';
-    }
-    function showFull() { document.getElementById('more-text').style.display = 'inline'; document.querySelector('.read-more-btn').style.display = 'none'; }
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        function drawTreeLines() {
+            const svg = document.getElementById('tree-lines');
+            svg.innerHTML = '';
+            
+            const doksaiBox = document.getElementById('doksai-box');
+            const momBox = document.getElementById('mom-box');
+            const parentsCenter = document.getElementById('parents-center-point');
+            const childrenRow = document.getElementById('children-row');
+            const childBoxes = Array.from(childrenRow.querySelectorAll('.member-box'));
 
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('selectstart', e => e.preventDefault());
-    document.addEventListener('copy', e => e.preventDefault());
-</script>
-</body>
-</html>
+            if (!childBoxes.length) return;
+
+            const doksaiRect = doksaiBox.getBoundingClientRect();
+            const momRect = momBox.getBoundingClientRect();
+            const parentY = doksaiRect.top + doksaiRect.height / 2; 
+            
+            const line1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line1.setAttribute("x1", doksaiRect.right);
+            line1.setAttribute("y1", parentY);
+            line1.setAttribute("x2", momRect.left);
+            line1.setAttribute("y2", parentY);
+            line1.setAttribute("stroke", "black");
+            line1.setAttribute("stroke-width", "4");
+            svg.appendChild(line1);
+
+            const parentCenterX = (doksaiRect.right + momRect.left) / 2;
+            const verticalDrop = 60;
+
+            const line2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line2.setAttribute("x1", parentCenterX);
+            line2.setAttribute("y1", parentY);
+            line2.setAttribute("x2", parentCenterX);
+            line2.setAttribute("y2", parentY + verticalDrop);
+            line2.setAttribute("stroke", "black");
+            line2.setAttribute("stroke-width", "4");
+            svg.appendChild(line2);
+
+            const firstChildRect = childBoxes[0].getBoundingClientRect();
+            const lastChildRect = childBoxes[childBoxes.length - 1].getBoundingClientRect();
+            const childRowTop = childrenRow.getBoundingClientRect().top;
+            const childLineY = childRowTop - 25; 
+
+            const line3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line3.setAttribute("x1", firstChildRect.left + firstChildRect.width / 2);
+            line3.setAttribute("y1", childLineY);
+            line3.setAttribute("x2", lastChildRect.left + lastChildRect.width / 2);
+            line3.setAttribute("y2", childLineY);
+            line3.setAttribute("stroke", "black");
+            line3.setAttribute("stroke-width", "4");
+            svg.appendChild(line3);
+
+            const line4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line4.setAttribute("x1", parentCenterX);
+            line4.setAttribute("y1", parentY + verticalDrop);
+            line4.setAttribute("x2", parentCenterX);
+            line4.setAttribute("y2", childLineY);
+            line4.setAttribute("stroke", "black");
+            line4.setAttribute("stroke-width", "4");
+            svg.appendChild(line4);
+
+            childBoxes.forEach(box => {
+                const boxRect = box.getBoundingClientRect();
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", boxRect.left + boxRect.width / 2);
+                line.setAttribute("y1", childLineY);
+                line.setAttribute("x2", boxRect.left + boxRect.width / 2);
+                line.setAttribute("y2", boxRect.top - 25);
+                line.setAttribute("stroke", "black");
+                line.setAttribute("stroke-width", "4");
+                svg.appendChild(line);
+            });
+        }
+
+        // 모달 열기/닫기 함수
+        function openModal(m) {
+            document.getElementById('modal-img').src = m.img;
+            document.getElementById('modal-name').innerText = m.name;
+            const descElem = document.getElementById('modal-desc');
+            if (m.
