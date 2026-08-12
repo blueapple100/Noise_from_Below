@@ -17,20 +17,37 @@
         }
 
         header { padding: 20px; background: linear-gradient(to right, #000000, #444444); display: flex; align-items: center; }
-        
         #logo { height: 80px; margin-right: 20px; }
-        
         .menu-text { color: white; font-size: 24px; font-weight: bold; }
 
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 20px; 
-            padding: 40px; 
-            max-width: 1200px;
+        /* 가계도 레이아웃 컨테이너 */
+        .family-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            gap: 40px;
+            max-width: 1400px;
             margin: 0 auto;
         }
-        
+
+        .tree-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .row-title {
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: -10px;
+        }
+
         .member-btn { 
             border: 4px solid white; 
             padding: 0; 
@@ -38,19 +55,25 @@
             cursor: pointer; 
             overflow: hidden; 
             transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 150px;
+            background: white;
         }
         .member-btn:hover { 
             transform: scale(1.05); 
             box-shadow: 0 8px 12px rgba(0,0,0,0.2); 
         }
-        .member-btn img { width: 100%; height: 180px; object-fit: cover; }
-        .member-btn span { padding: 10px; font-weight: bold; color: #333; }
+        .member-btn img { width: 100%; height: 140px; object-fit: cover; }
+        .member-btn span { padding: 8px; font-weight: bold; color: #333; font-size: 14px; text-align: center; }
 
+        /* 모달 스타일 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 20px; display: flex; gap: 20px; width: 80%; max-width: 600px; }
         .modal-img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+
         .modal-text-area {
             max-height: 250px;
             overflow-y: auto;
@@ -70,11 +93,25 @@
     </style>
 </head>
 <body>
+
 <header>
     <img src="로고.png" id="logo" alt="Logo">
     <div class="menu-text">민원이 안끊기는 볼륨 MAX 아랫집</div>
 </header>
-<div class="container" id="member-container"></div>
+
+<div class="family-tree" id="tree-container">
+    <!-- 부모님 줄 -->
+    <div class="row-title">부모</div>
+    <div class="tree-row" id="row-parents"></div>
+
+    <!-- 1세대 자녀들 줄 -->
+    <div class="row-title">자녀들</div>
+    <div class="tree-row" id="row-children"></div>
+
+    <!-- 반려동물 줄 -->
+    <div class="row-title">반려동물</div>
+    <div class="tree-row" id="row-pet"></div>
+</div>
 
 <div id="modal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
@@ -89,29 +126,36 @@
 
 <script>
     const members = [
-        { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다<br>L: 아랫집, 아내, 토마토 스파게티<br>H: 이걸 읽고 있는 너" },
-        { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다<br>L: 햄버거, 북돌이 인형, 아랫집, 밤마다 소리지르고 엄크뜨기, 몰라이<br>H: 겨울" },
-        { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티, 청바지, 분홍색 가방과 돼지 모자를 쓰고 있다." },
-        { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] / <br>블애입니다.!<br>L: 파워에이드, 로스트 실버, 후르츠텔라, 아랫집, 떡볶이, 게임 개발, 엄마아빠<br>H: 김치, 익스트림 데몬 김설띠, 전투를 하자 " },
-        { name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0", desc: "[ 사남 ] / 하늘색 곰 귀가 있는 머리와 후드티를 입고 있다. 파곰뱃살통통이라는 밈이 있다. 줄여서 파뱃통 심지어 이 밈으로 자기 자신을 까기도 한다! [60] 원래는 주로 Piggy에 대한 영상을 업로드하였는데, 최근 들어 영상이 잘 업로드되지 않는걸로 보아 유튜브 활동에 대한 템포를 잠시 낮춘 것으로 보인다." },
+        { id: "독새", name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다<br>L: 아랫집, 아내, 토마토 스파게티<br>H: 이걸 읽고 있는 너", row: "parents" },
+        { id: "이배일", name: "이배일", color: "#FFC0CB", img: "로고.png", yt: "#", desc: "[ 엄마 ]<br>아랫집의 안방마님", row: "parents" },
+        { id: "윈티", name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티, 청바지, 분홍색 가방과 돼지 모자를 쓰고 있다.", row: "children" },
+        { id: "문장준", name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다<br>L: 햄버거, 북돌이 인형, 아랫집, 밤마다 소리지르고 엄크뜨기, 몰라이<br>H: 겨울", row: "children" },
+        { id: "블애", name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] / <br>블애입니다.!<br>L: 파워에이드, 로스트 실버, 후르츠텔라, 아랫집, 떡볶이, 게임 개발, 엄마아빠<br>H: 김치, 익스트림 데몬 김설띠, 전투를 하자 ", row: "children" },
+        { id: "파곰", name: "파곰", color: "#87CEEB", img: "파곰.png", yt: "https://www.youtube.com/@%EA%B9%80%ED%8C%8C%EA%B3%B0", desc: "[ 사남 ] / 하늘색 곰 귀가 있는 머리와 후드티를 입고 있다. 파곰뱃살통통이라는 밈이 있다.", row: "children" },
         { name: "재켄", color: "#90EE90", img: "재켄.png", yt: "https://www.youtube.com/@%EC%9D%BC%EB%A1%9C%EC%99%80%EB%B3%B4%EC%9D%B4", shortDesc: "[ 오남 ]<br>L: 아랫집, 그림 그리기랑 그림 구경하기, 게임, 게임 개발, 운동, 🤓",
-          longDesc: ", 샌즈, 파피루스, 언더펠 샌즈, 언더스왑 샌즈, 스왑펠 샌즈, 펠스왑 샌즈, 아우터테일 샌즈, 아우터펠 샌즈, 아우터스왑 샌즈, 스토리시프트 샌즈, 스토리스핀 샌즈, 더스트 샌즈, 호러 샌즈, 킬러 샌즈, 잉크 샌즈, 에러 샌즈, 페이탈 에러 샌즈, 제노 샌즈, 프레쉬 샌즈, 드림 샌즈, 나이트메어 샌즈, 크로스 샌즈, 에픽 샌즈, 리퍼 샌즈, 하드테일 샌즈, 라스트 브레스 샌즈, 서든 체인지 샌즈, 인세니티 샌즈, 네거테일 샌즈, 네거티브테일 샌즈, 언더월드 샌즈, 호러스왑 샌즈, 호러펠 샌즈, 더스트펠 샌즈, 더스트스왑 샌즈, 더스트더스트 샌즈, 스왑스왑 샌즈, 리버트스왑 샌즈, 펠펠 샌즈, 리버트펠 샌즈, 드림스왑 샌즈, 블루베리 샌즈, 블루베러 샌즈, 에러 404 샌즈, 프레쉬 잉크 샌즈, 델타 샌즈, 퀀텀테일 샌즈, 트레이너테일 샌즈, 디스트러스트 샌즈, 더스트트러스트 샌즈, 티라노사우루스, 트리케라톱스, 벨로키랍토르, 스피노사우루스, 스테고사우루스, 브라키오사우루스, 아파토사우루스, 디플로도쿠스, 알로사우루스, 카르노타우루스, 기가노토사우루스, 안킬로사우루스, 파라사우롤로푸스, 이구아노돈, 파키케팔로사우루스, 갈리미무스, 데이노니쿠스, 유타랍토르, 알베르토사우루스, 타르보사우루스, 케라토사우루스, 딜로포사우루스, 바리오닉스, 수코미무스, 아크로칸토사우루스, 카르카로돈토사우루스, 마푸사우루스, 메갈로사우루스, 코엘로피시스, 콤프소그나투스, 오비랍토르, 테리지노사우루스, 데이노케이루스, 오르니토미무스, 에드몬토사우루스, 코리토사우루스, 람베오사우루스, 마이아사우라, 카스모사우루스, 스티라코사우루스, 프로토케라톱스, 프시타코사우루스, 켄트로사우루스, 아마르가사우루스, 아르헨티노사우루스, 파타고티탄, 살타사우루스, 마멘키사우루스, 카마라사우루스, 노도사우루스, 하츄핑, 바로핑, 아자핑, 차차핑, 라라핑, 해핑, 키키핑, 아잉핑, 부끄핑, 깜빡핑, 띠용핑, 주르핑, 차나핑, 따라핑, 나르핑, 무셔핑, 투투핑, 떠벌핑, 다조핑, 화나핑, 시러핑, 바네핑, 덜덜핑, 그림핑, 무거핑, 꺼꿀핑, 씽씽핑, 베베핑, 코자핑, 딱풀핑, 모야핑, 토이핑, 또까핑, 플라핑, 노라핑, 노리핑, 아휴핑, 똑똑핑, 꽁꽁핑, 찌릿핑, 홀로핑, 악동핑, 믿어핑, 방글핑, 조아핑, 토닥핑, 까르핑, 아야핑, 소원핑, 쪼꼼핑, 싹싹핑, 맛나핑, 포근핑, 메모핑, 공쥬핑, 짝짝핑, 주네핑, 뚝딱핑, 발레핑, 원더핑, 보석핑, 솔찌핑, 나나핑, 꾸래핑, 행운핑, 빨리핑, 얌얌핑, 뜨거핑, 삐뽀핑, 힘내핑, 고쳐핑, 아라핑, 패션핑, 꼼딱핑, 퐁당핑, 파티핑, 꾸며핑, 삐짐핑, 아아핑, 빙글핑, 하늘핑, 고고핑, 아롱핑, 다롱핑, 샤샤핑, 말랑핑, 포실핑, 새콤핑, 달콤핑, 캔디핑, 머랭핑, 샌드핑, 또너핑, 와플핑, 마카핑, 핫케핑, 머핑, 커핑, 요거핑, 눈꽃핑, 푸딩핑, 멜로핑, 쪼꼬핑, 뿌뿌핑, 빤짝핑, 초롱핑, 빛나핑, 오로라핑, 왕자핑, 뽀뽀핑, 유리핑, 딩동핑, 나그네핑, 댄스핑, 고마핑, 함께핑, 깡총핑, 훌라핑, 나눔핑, 루루핑, 몰래핑, 뿌쵸핑, 여우핑, 뽀송핑, 통통핑,<br>H: 탈두의 12번째 척추뼈."
+          longDesc: ", 샌즈, 파피루스, 언더펠 샌즈, 언더스왑 샌즈, 스왑펠 샌즈, 펠스왑 샌즈, 아우터테일 샌즈, 아우터펠 샌즈, 아우터스왑 샌즈, 스토리시프트 샌즈, 스토리스핀 샌즈, 더스트 샌즈, 호러 샌즈, 킬러 샌즈, 잉크 샌즈, 에러 샌즈, 페이탈 에러 샌즈, 제노 샌즈, 프레쉬 샌즈, 드림 샌즈, 나이트메어 샌즈, 크로스 샌즈, 에픽 샌즈, 리퍼 샌즈, 하드테일 샌즈, 라스트 브레스 샌즈, 서든 체인지 샌즈, 인세니티 샌즈, 네거테일 샌즈, 네거티브테일 샌즈, 언더월드 샌즈, 호러스왑 샌즈, 호러펠 샌즈, 더스트펠 샌즈, 더스트스왑 샌즈, 더스트더스트 샌즈, 스왑스왑 샌즈, 리버트스왑 샌즈, 펠펠 샌즈, 리버트펠 샌즈, 드림스왑 샌즈, 블루베리 샌즈, 블루베러 샌즈, 에러 404 샌즈, 프레쉬 잉크 샌즈, 델타 샌즈, 퀀텀테일 샌즈, 트레이너테일 샌즈, 디스트러스트 샌즈, 더스트트러스트 샌즈, 티라노사우루스, 트리케라톱스, 벨로키랍토르, 스피노사우루스, 스테고사우루스, 브라키오사우루스, 아파토사우루스, 디플로도쿠스, 알로사우루스, 카르노타우루스, 기가노토사우루스, 안킬로사우루스, 파라사우롤로푸스, 이구아노돈, 파키케팔로사우루스, 갈리미무스, 데이노니쿠스, 유타랍토르, 알베르토사우루스, 타르보사우루스, 케라토사우루스, 딜로포사우루스, 바리오닉스, 수코미무스, 아크로칸토사우루스, 카르카로돈토사우루스, 마푸사우루스, 메갈로사우루스, 코엘로피시스, 콤프소그나투스, 오비랍토르, 테리지노사우루스, 데이노케이루스, 오르니토미무스, 에드몬토사우루스, 코리토사우루스, 람베오사우루스, 마이아사우라, 카스모사우루스, 스티라코사우루스, 프로토케라톱스, 프시타코사우루스, 켄트로사우루스, 아마르가사우루스, 아르헨티노사우루스, 파타고티탄, 살타사우루스, 마멘키사우루스, 카마라사우루스, 노도사우루스, 하츄핑, 바로핑, 아자핑, 차차핑, 라라핑, 해핑, 키키핑, 아잉핑, 부끄핑, 깜빡핑, 띠용핑, 주르핑, 차나핑, 따라핑, 나르핑, 무셔핑, 투투핑, 떠벌핑, 다조핑, 화나핑, 시러핑, 바네핑, 덜덜핑, 그림핑, 무거핑, 꺼꿀핑, 씽씽핑, 베베핑, 코자핑, 딱풀핑, 모야핑, 토이핑, 또까핑, 플라핑, 노라핑, 노리핑, 아휴핑, 똑똑핑, 꽁꽁핑, 찌릿핑, 홀로핑, 악동핑, 믿어핑, 방글핑, 조아핑, 토닥핑, 까르핑, 아야핑, 소원핑, 쪼꼼핑, 싹싹핑, 맛나핑, 포근핑, 메모핑, 공쥬핑, 짝짝핑, 주네핑, 뚝딱핑, 발레핑, 원더핑, 보석핑, 솔찌핑, 나나핑, 꾸래핑, 행운핑, 빨리핑, 얌얌핑, 뜨거핑, 삐뽀핑, 힘내핑, 고쳐핑, 아라핑, 패션핑, 꼼딱핑, 퐁당핑, 파티핑, 꾸며핑, 삐짐핑, 아아핑, 빙글핑, 하늘핑, 고고핑, 아롱핑, 다롱핑, 샤샤핑, 말랑핑, 포실핑, 새콤핑, 달콤핑, 캔디핑, 머랭핑, 샌드핑, 또너핑, 와플핑, 마카핑, 핫케핑, 머핑, 커핑, 요거핑, 눈꽃핑, 푸딩핑, 멜로핑, 쪼꼬핑, 뿌뿌핑, 빤짝핑, 초롱핑, 빛나핑, 오로라핑, 왕자핑, 뽀뽀핑, 유리핑, 딩동핑, 나그네핑, 댄스핑, 고마핑, 함께핑, 깡총핑, 훌라핑, 나눔핑, 루루핑, 몰래핑, 뿌쵸핑, 여우핑, 뽀송핑, 통통핑,<br>H: 탈두의 12번째 척추뼈.",
+          row: "children"
         },
-        { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "[ 육남 ] / 주황색 머리카락에 주황붉은 눈동자, 핑크색 헤드셋을 쓰고 있다. 박사같은 작은 안경 또한 착용하고 있다. 아랫집 크루에 가장 마지막으로 합류한 멤버이다. 본인 피셜 블애와 만난지 어언 6년이 되었다고 한다. 주로 게임 관련 사운드트랙을 제작해서 올린다! " },
-        { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 연보라색 헤어와 토끼 모자, 상의를 착용하고 있다. 아랫집의 유일한 여성 멤버이며, 빠른 년생이라고 한다..? [68] 리듬게임을 매우 잘하며, 채널에 업로드 된 영상들이 대부분 리듬게임 플레이 영상들이다. 설탕이라는 애완견을 키우고 있다! 구독자 1천명 기념으로 Q&A 영상을 업로드 하였는데, 독새를 오빠라고 칭하면 서로 극혐한다고 한다." },
-        { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "[ 막내 ]<br>L: 아랫집, 군만두, 도넛, 스키비디 토일렛, SCP, 백룸<br>H: (약간/조금/보통/쎈/많이 쎈/ㅈㄴ쎈/무서운/익스트림 데몬/익스트림 데몬 스캐리/그냥) 김설띠, 여름 " },
-        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 집나간 새끼 ]/ 노란색 목도리에 초롱초롱한 눈이 포인트, 양은냄비를 거꾸로 뒤집어 쓰고 있다. 아랫집 멤버들 중 가장 근황이 적으며, 현생에 집중하고 있는 것으로 추정된다. 그러나 독새의 영상에는 종종 출연하기에 얼굴은 비춰주지 않는 것은 아니다!" }
+        { id: "오드", name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "[ 육남 ] / 주황색 머리카락에 주황붉은 눈동자, 핑크색 헤드셋을 쓰고 있다.", row: "children" },
+        { id: "김설띠", name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 연보라색 헤어와 토끼 모자, 상의를 착용하고 있다.", row: "children" },
+        { id: "고스", name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "[ 막내 아들 ]<br>L: 아랫집, 군만두, 도넛, 스키비디 토일렛, SCP, 백룸", row: "children" },
+        { id: "탈두", name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 애완 두부 / 집나간 새끼 ]<br>노란색 목도리에 초롱초롱한 눈이 포인트, 양은냄비를 거꾸로 뒤집어 쓰고 있다.", row: "pet" }
     ];
 
-    const container = document.getElementById('member-container');
-    
     members.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'member-btn';
         btn.style.background = `linear-gradient(to bottom, ${m.color}, #ffffff)`;
         btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><span>${m.name}</span>`;
         btn.onclick = () => openModal(m);
-        container.appendChild(btn);
+
+        if (m.row === "parents") {
+            document.getElementById('row-parents').appendChild(btn);
+        } else if (m.row === "children") {
+            document.getElementById('row-children').appendChild(btn);
+        } else if (m.row === "pet") {
+            document.getElementById('row-pet').appendChild(btn);
+        }
     });
 
     function openModal(m) {
@@ -119,7 +163,7 @@
         document.getElementById('modal-name').innerText = m.name; 
         
         const descElem = document.getElementById('modal-desc');
-        if (m.name === "재켄") {
+        if (m.id === "재켄") {
             descElem.innerHTML = m.shortDesc + 
                 '<span id="more-text" style="display:none;">' + m.longDesc + '</span>' +
                 '<br><span class="read-more-btn" onclick="showFull()">...더보기</span>';
@@ -140,15 +184,10 @@
         document.getElementById('modal').style.display = 'none'; 
     }
 
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-    document.addEventListener('selectstart', function(e) {
-        e.preventDefault();
-    });
-    document.addEventListener('copy', function(e) {
-        e.preventDefault();
-    });
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
 </script>
+
 </body>
 </html>
