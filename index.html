@@ -69,7 +69,7 @@
 <script>
     const members = [
         { name: "독새", color: "#808080", img: "독새.png", yt: "https://www.youtube.com/@%EB%8F%85%EC%83%88", desc: "[ 아빠 ]<br>독새 채널의 주인이자 아랫집의 가장<br>폭주기관차 같은 텐션으로 모두를 이끈다" },
-        { name: "이배일", color: "#FFFFFF", img: "이배일.png", yt: "https://www.youtube.com/@%EC%9D%B4%EB%B0%B0%EC%9D%BC", desc: "[ 엄마 ]<br>독새 ㅎㅇ" },
+        { name: "이배일", color: "#FFFFFF", img: "배일.png", yt: "https://www.youtube.com/@%EC%9D%B4%EB%B0%B0%EC%9D%BC", desc: "[ 엄마 ] <br>독새 ㅎㅇ" },
         { name: "문장준", color: "#FF0000", img: "문장준.jpeg", yt: "https://www.youtube.com/@%EB%AC%B8%EC%9E%A5%EC%A4%80_09", desc: "[ 장남 ]<br>유일하게 얼굴을 공개하고 있다" },
         { name: "윈티", color: "#FFB6C1", img: "윈티.png", yt: "https://www.youtube.com/@%EC%9C%88%ED%8B%B0", desc: "[ 차남 ]분홍색 머리에 하얀 후드티를 입고 있다." },
         { name: "블애", color: "#6A5ACD", img: "블애.png", yt: "https://www.youtube.com/@NOT_BLAE", desc: "[ 삼남 ] 블애입니다.!" },
@@ -86,7 +86,7 @@
     const byName = (n) => members.find(m => m.name === n);
     const dad = byName("독새");
     const mom = byName("이배일");
-)
+
     function makeCard(m, extraClass) {
         const el = document.createElement('div');
         el.className = 'tree-card' + (extraClass ? ' ' + extraClass : '');
