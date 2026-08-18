@@ -17,7 +17,7 @@
 
         .tree-section { max-width: 1300px; margin: 60px auto; padding: 0 30px; }
 
-        .tree-card { display: flex; flex-direction: column; align-items: center; padding: 8px 8px 10px; border-radius: 14px; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .tree-card { display: flex; flex-direction: column; align-items: center; padding: 8px 8px 10px; border-radius: 14px; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; background: white; z-index: 2; }
         .tree-card:hover { transform: scale(1.06); box-shadow: 0 8px 14px rgba(0,0,0,0.22); }
         .tree-card img { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; display: block; }
         .tree-card span { margin-top: 6px; font-weight: bold; color: #222; }
@@ -31,20 +31,27 @@
         .tree-vline-drop { width: 5px; height: 40px; background: #111; margin: 0 auto; }
 
         .tree-children-wrap { position: relative; padding-top: 40px; }
-        .tree-children-hline { position: absolute; top: 40px; left: 4%; right: 4%; height: 5px; background: #111; }
-        .tree-children { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 40px; }
+        .tree-children { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 40px; position: relative; }
 
         .tree-slot { position: relative; display: flex; justify-content: center; flex: 1; }
-        .tree-slot::before { content: ''; position: absolute; top: -40px; left: 50%; width: 5px; height: 40px; background: #111; transform: translateX(-50%); }
+        .tree-slot::after { content: ''; position: absolute; top: -40px; left: 0; width: 100%; height: 5px; background: #111; z-index: 1; }
+        .tree-slot:first-child::after { left: 50%; width: 50%; }
+        .tree-slot:last-child::after { width: 50%; }
+
+        .tree-slot::before { content: ''; position: absolute; top: -40px; left: 50%; width: 5px; height: 40px; background: #111; transform: translateX(-50%); z-index: 1; }
 
         .tree-hub-slot { flex: 2.6; }
         .tree-hub { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .hub-drop { width: 5px; height: 30px; background: #111; }
         .hub-wrap { position: relative; padding-top: 30px; width: 100%; }
-        .hub-hline { position: absolute; top: 30px; left: 12%; right: 12%; height: 5px; background: #111; }
-        .hub-row { display: flex; justify-content: space-between; padding-top: 30px; }
+        .hub-row { display: flex; justify-content: space-between; padding-top: 30px; position: relative; }
+        
         .hub-item { position: relative; display: flex; justify-content: center; flex: 1; }
-        .hub-item::before { content: ''; position: absolute; top: -30px; left: 50%; width: 5px; height: 30px; background: #111; transform: translateX(-50%); }
+        .hub-item::after { content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 5px; background: #111; z-index: 1; }
+        .hub-item:first-child::after { left: 50%; width: 50%; }
+        .hub-item:last-child::after { width: 50%; }
+
+        .hub-item::before { content: ''; position: absolute; top: -30px; left: 50%; width: 5px; height: 30px; background: #111; transform: translateX(-50%); z-index: 1; }
     </style>
 </head>
 <body>
@@ -80,7 +87,7 @@
         { name: "오드", color: "#FFA500", img: "오드.png", yt: "https://www.youtube.com/@fake_od", desc: "[ 육남 ] 아랫집에 마지막 합류, 사운드트랙 제작." },
         { name: "김설띠", color: "#D8BFD8", img: "김설띠.png", yt: "https://www.youtube.com/@Kimsultye0110", desc: "장녀 / 유일한 여성 멤버, 리듬게임 고수." },
         { name: "고스", color: "#808080", img: "고스.png", yt: "https://www.youtube.com/@gos2017", desc: "[ 막내 ] 스키비디 토일렛과 SCP를 좋아함." },
-        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 집나간 새끼 ] 현생에 집중 중." }
+        { name: "탈두", color: "#FFFF00", img: "탈두.png", yt: "https://www.youtube.com/@TALDUDA", desc: "[ 애완두부 ] 현생에 집중 중." }
     ];
 
     const byName = (n) => members.find(m => m.name === n);
@@ -109,14 +116,12 @@
         parentsRow.appendChild(makeCard(mom, 'parent'));
         section.appendChild(parentsRow);
 
-
         const drop = document.createElement('div');
         drop.className = 'tree-vline-drop';
         section.appendChild(drop);
         
         const wrap = document.createElement('div');
         wrap.className = 'tree-children-wrap';
-        wrap.innerHTML = '<div class="tree-children-hline"></div>';
         const row = document.createElement('div');
         row.className = 'tree-children';
 
@@ -138,7 +143,6 @@
         hub.innerHTML = '<div class="hub-drop"></div>';
         const hubWrap = document.createElement('div');
         hubWrap.className = 'hub-wrap';
-        hubWrap.innerHTML = '<div class="hub-hline"></div>';
         const hubRow = document.createElement('div');
         hubRow.className = 'hub-row';
         hubNames.forEach(n => {
