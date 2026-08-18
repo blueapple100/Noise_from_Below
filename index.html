@@ -31,26 +31,41 @@
         .tree-vline-drop { width: 5px; height: 40px; background: #111; margin: 0 auto; }
 
         .tree-children-wrap { position: relative; padding-top: 40px; }
+        
+        /* 첫 번째 카드 중앙부터 마지막 카드 중앙까지 정확히 가로지르는 선 */
+        .tree-children-hline { 
+            position: absolute; 
+            top: 40px; 
+            left: calc(100% / 18); 
+            right: calc(100% / 18); 
+            height: 5px; 
+            background: #111; 
+            z-index: 1; 
+        }
+
         .tree-children { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 40px; position: relative; }
 
         .tree-slot { position: relative; display: flex; justify-content: center; flex: 1; }
-        .tree-slot::after { content: ''; position: absolute; top: -40px; left: 0; width: 100%; height: 5px; background: #111; z-index: 1; }
-        .tree-slot:first-child::after { left: 50%; width: 50%; }
-        .tree-slot:last-child::after { width: 50%; }
-
         .tree-slot::before { content: ''; position: absolute; top: -40px; left: 50%; width: 5px; height: 40px; background: #111; transform: translateX(-50%); z-index: 1; }
 
         .tree-hub-slot { flex: 2.6; }
         .tree-hub { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .hub-drop { width: 5px; height: 30px; background: #111; }
         .hub-wrap { position: relative; padding-top: 30px; width: 100%; }
-        .hub-row { display: flex; justify-content: space-between; padding-top: 30px; position: relative; }
         
-        .hub-item { position: relative; display: flex; justify-content: center; flex: 1; }
-        .hub-item::after { content: ''; position: absolute; top: -30px; left: 0; width: 100%; height: 5px; background: #111; z-index: 1; }
-        .hub-item:first-child::after { left: 50%; width: 50%; }
-        .hub-item:last-child::after { width: 50%; }
+        /* 허브 내부 가로선 */
+        .hub-hline { 
+            position: absolute; 
+            top: 30px; 
+            left: 12%; 
+            right: 12%; 
+            height: 5px; 
+            background: #111; 
+            z-index: 1; 
+        }
 
+        .hub-row { display: flex; justify-content: space-between; padding-top: 30px; position: relative; }
+        .hub-item { position: relative; display: flex; justify-content: center; flex: 1; }
         .hub-item::before { content: ''; position: absolute; top: -30px; left: 50%; width: 5px; height: 30px; background: #111; transform: translateX(-50%); z-index: 1; }
     </style>
 </head>
@@ -122,6 +137,8 @@
         
         const wrap = document.createElement('div');
         wrap.className = 'tree-children-wrap';
+        wrap.innerHTML = '<div class="tree-children-hline"></div>';
+        
         const row = document.createElement('div');
         row.className = 'tree-children';
 
@@ -143,6 +160,7 @@
         hub.innerHTML = '<div class="hub-drop"></div>';
         const hubWrap = document.createElement('div');
         hubWrap.className = 'hub-wrap';
+        hubWrap.innerHTML = '<div class="hub-hline"></div>';
         const hubRow = document.createElement('div');
         hubRow.className = 'hub-row';
         hubNames.forEach(n => {
