@@ -65,6 +65,18 @@
         .hub-row { display: flex; justify-content: space-between; padding-top: 30px; position: relative; }
         .hub-item { position: relative; display: flex; justify-content: center; flex: 1; }
         .hub-item::before { content: ''; position: absolute; top: -30px; left: 50%; width: 5px; height: 30px; background: #111; transform: translateX(-50%); z-index: 1; }
+
+        /* 팬게임 섹션 스타일 */
+        .fangame-section { max-width: 1300px; margin: 80px auto 60px; padding: 0 30px; }
+        .fangame-title { font-size: 28px; font-weight: bold; margin-bottom: 30px; color: #222; text-align: center; }
+        .fangame-container { display: flex; flex-direction: column; gap: 30px; align-items: center; }
+        .fangame-card { display: flex; background: white; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 800px; padding: 20px; gap: 25px; align-items: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .fangame-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
+        .fangame-img-wrap { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex-shrink: 0; }
+        .fangame-img-wrap img { width: 220px; height: 130px; object-fit: cover; border-radius: 10px; border: 2px solid #ddd; transition: opacity 0.2s; }
+        .fangame-img-wrap img:hover { opacity: 0.9; }
+        .fangame-game-title { margin-top: 10px; font-size: 18px; font-weight: bold; color: #111; text-align: center; }
+        .fangame-desc { font-size: 15px; color: #444; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -74,6 +86,34 @@
 </header>
 
 <div class="tree-section" id="tree-section"></div>
+
+<div class="fangame-section">
+    <div class="fangame-title">팬게임 목록</div>
+    <div class="fangame-container">
+        
+        <div class="fangame-card">
+            <a href="https://gamebanana.com/mods/574233" class="fangame-img-wrap" target="_blank">
+                <img src="FND.png" alt="FND">
+                <div class="fangame-game-title">프나독</div>
+            </a>
+            <div class="fangame-desc">
+                블애를 필두로 여러 인원이 참여하여 만든 Friday Night Funkin' 팬 모드 입니다! 팀 아랫집 멤버 전원과 이배일이 모두 등장합니다! 
+            </div>
+        </div>
+
+
+        <div class="fangame-card">
+            <a href="https://www.roblox.com/ko/games/18587225481/unnamed" class="fangame-img-wrap" target="_blank">
+                <img src="DOKPEEDRUN.png" alt="독피드런">
+                <div class="fangame-game-title">독피드런</div>
+            </a>
+            <div class="fangame-desc">
+                스릴 넘치고 긴장감 있는 '독피드런'!!!!!
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <div id="modal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
